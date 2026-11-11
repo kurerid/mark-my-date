@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Профиль</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2A6BE0}a:hover{color:#1F55B8}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #F2F3F7; font-family: Inter, system-ui, sans-serif; color: #15171C">
+<main style="position: absolute; top: 0; left: 0; right: 0; bottom: 84px; overflow-y: auto; box-sizing: border-box; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 16px">
+
+<header style="display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-family: Manrope, Inter, sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Профиль</h1>
+<button style="height: 40px; padding: 0 14px; border-radius: 12px; border: 1px solid #E1E4EB; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 600; cursor: pointer">Изменить</button>
+</header>
+
+<section style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<span aria-hidden="true" style="width: 80px; height: 80px; border-radius: 26px; background: {{accent}}; color: #FFFFFF; font-family: Manrope, Inter, sans-serif; font-size: 30px; font-weight: 800; display: flex; align-items: center; justify-content: center">Н</span>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 700">Студия «Нежность»</h2>
+<p style="margin: 0; font-size: 14px; color: #5F6573">Маникюр и педикюр · мастер Светлана</p>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #5F6573"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>[АДРЕС СТУДИИ]</div>
+</section>
+
+<section style="background: {{accentSoft}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 700">Ссылка для записи</h2>
+<p style="margin: 0; font-size: 13px; color: #3A3F4A">Отправьте клиентам — они увидят свободные окна и запишутся прямо в Telegram.</p>
+</div>
+<div style="background: #FFFFFF; border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 500; color: #15171C">t.me/[ВАШ_БОТ]?startapp=nezhnost</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button style="height: 44px; border-radius: 12px; border: none; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>Копировать</button>
+<button style="height: 44px; border-radius: 12px; border: none; background: {{accent}}; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"></path></svg>Поделиться</button>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Услуги</h2>
+<button style="height: 36px; padding: 0 4px; border: none; background: transparent; color: {{accent}}; font-size: 14px; font-weight: 600; cursor: pointer">+ Добавить</button>
+</div>
+<div style="background: #FFFFFF; border-radius: 18px; display: flex; flex-direction: column">
+<sc-for list="{{services}}" as="s" hint-placeholder-count="4">
+<div style="{{s.row}}">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600">{{s.name}}</span><span style="font-size: 13px; color: #5F6573">{{s.dur}}</span></div>
+<span style="font-size: 14px; font-weight: 600">[ЦЕНА]</span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9AA0AC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; padding: 0 4px; font-size: 17px; font-weight: 700">О студии</h2>
+<p style="margin: 0; background: #FFFFFF; border-radius: 18px; padding: 14px 16px; font-size: 14px; line-height: 1.5; color: #3A3F4A">[Короткое описание: опыт мастера, материалы, как добраться]</p>
+</section>
+
+</main>
+
+<nav aria-label="Основная навигация" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; box-sizing: border-box; padding: 6px 8px 22px; background: #FFFFFF; border-top: 1px solid #E4E6EC; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></span>Календарь</a>
+<a href="Bookings.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center; position: relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 3h6v3H9zM9 11h6M9 15h4"></path></svg><span style="position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; border-radius: 999px; background: #D9480F; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span></span>Записи</a>
+<a href="Profile.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: {{accent}}; font-size: 11px; font-weight: 600">
+<span style="width: 56px; height: 30px; border-radius: 999px; background: {{accentSoft}}; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg></span>Профиль</a>
+<a href="Settings.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg></span>Настройки</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2A6BE0","options":["#2A6BE0","#7C3AED","#0F766E","#C2410C"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#2A6BE0';
+    const list = [
+      ['Маникюр с покрытием', '1 ч 30 мин'],
+      ['Снятие покрытия', '30 мин'],
+      ['Наращивание', '2 ч 30 мин'],
+      ['Педикюр', '1 ч 30 мин']
+    ];
+    const services = list.map((s, i) => ({
+      name: s[0], dur: s[1],
+      row: 'display: flex; align-items: center; gap: 10px; padding: 12px 16px; min-height: 44px;' + (i > 0 ? ' border-top: 1px solid #EEF0F4;' : '')
+    }));
+    return { accent, accentSoft: accent + '1A', services };
+  }
+}
+</script>
+</body>
+</html>

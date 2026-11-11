@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Записи</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2A6BE0}a:hover{color:#1F55B8}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #F2F3F7; font-family: Inter, system-ui, sans-serif; color: #15171C">
+<main style="position: absolute; top: 0; left: 0; right: 0; bottom: 84px; overflow-y: auto; box-sizing: border-box; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 16px">
+
+<header style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 13px; color: #5F6573">Заявки клиентов</p>
+<h1 style="margin: 0; font-family: Manrope, Inter, sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Записи</h1>
+</header>
+
+<div role="tablist" aria-label="Фильтр записей" style="background: #E6E8EE; border-radius: 14px; padding: 4px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+<button role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{showPending}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 13px; color: #5F6573">Клиент получит уведомление в Telegram сразу после подтверждения.</p>
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 999px; background: #FDE7D4; color: #8A4300; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center">МС</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600">Мария Соколова</span><span style="font-size: 13px; color: #5F6573">@maria_s</span></div>
+<span style="font-size: 11px; font-weight: 600; color: #8A4300; background: #FFF0DB; border-radius: 999px; padding: 3px 8px">Ждёт</span>
+</div>
+<div style="background: #F6F7FA; border-radius: 12px; padding: 10px 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; color: #5F6573">Дата и время</span><span style="font-size: 14px; font-weight: 600">Ср, 11 нояб · 12:00</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; color: #5F6573">Услуга</span><span style="font-size: 14px; font-weight: 600">Наращивание</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button style="height: 44px; border-radius: 12px; border: 1px solid #E1E4EB; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 600; cursor: pointer">Отклонить</button>
+<button style="height: 44px; border-radius: 12px; border: none; background: {{accent}}; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer">Подтвердить</button>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 999px; background: #E3ECFC; color: #1F4FB5; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center">ЕВ</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600">Елена Воронина</span><span style="font-size: 13px; color: #5F6573">@lena_vrn</span></div>
+<span style="font-size: 11px; font-weight: 600; color: #8A4300; background: #FFF0DB; border-radius: 999px; padding: 3px 8px">Ждёт</span>
+</div>
+<div style="background: #F6F7FA; border-radius: 12px; padding: 10px 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; color: #5F6573">Дата и время</span><span style="font-size: 14px; font-weight: 600">Пт, 13 нояб · 10:00</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; color: #5F6573">Услуга</span><span style="font-size: 14px; font-weight: 600">Педикюр</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button style="height: 44px; border-radius: 12px; border: 1px solid #E1E4EB; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 600; cursor: pointer">Отклонить</button>
+<button style="height: 44px; border-radius: 12px; border: none; background: {{accent}}; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer">Подтвердить</button>
+</div>
+</article>
+</div>
+</sc-if>
+
+<sc-if value="{{showConfirmed}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{confirmed}}" as="c" hint-placeholder-count="4">
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #5F6573">{{c.day}}</span><span style="font-size: 16px; font-weight: 700">{{c.time}}</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px; border-left: 3px solid {{accent}}; padding-left: 12px"><span style="font-size: 15px; font-weight: 600">{{c.name}}</span><span style="font-size: 13px; color: #5F6573">{{c.service}}</span></div>
+<span style="display: flex; align-items: center; gap: 4px; font-size: 11px; color: #5F6573"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>{{c.remind}}</span>
+</article>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{showPast}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{past}}" as="c" hint-placeholder-count="3">
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #5F6573">{{c.day}}</span><span style="font-size: 16px; font-weight: 700; color: #5F6573">{{c.time}}</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 2px; border-left: 3px solid #C9CDD6; padding-left: 12px"><span style="font-size: 15px; font-weight: 600">{{c.name}}</span><span style="font-size: 13px; color: #5F6573">{{c.service}}</span></div>
+</article>
+</sc-for>
+</div>
+</sc-if>
+
+</main>
+
+<nav aria-label="Основная навигация" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; box-sizing: border-box; padding: 6px 8px 22px; background: #FFFFFF; border-top: 1px solid #E4E6EC; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></span>Календарь</a>
+<a href="Bookings.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: {{accent}}; font-size: 11px; font-weight: 600">
+<span style="width: 56px; height: 30px; border-radius: 999px; background: {{accentSoft}}; display: flex; align-items: center; justify-content: center; position: relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 3h6v3H9zM9 11h6M9 15h4"></path></svg><span style="position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; border-radius: 999px; background: #D9480F; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span></span>Записи</a>
+<a href="Profile.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg></span>Профиль</a>
+<a href="Settings.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg></span>Настройки</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2A6BE0","options":["#2A6BE0","#7C3AED","#0F766E","#C2410C"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 0 }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#2A6BE0';
+    const labels = ['Ожидают · 2', 'Подтверждены', 'Прошедшие'];
+    const tabs = labels.map((label, i) => {
+      const on = this.state.tab === i;
+      return {
+        label, sel: on ? 'true' : 'false',
+        pick: () => this.setState({ tab: i }),
+        style: 'height: 40px; border: none; border-radius: 10px; font-size: 13px; cursor: pointer; ' + (on ? 'background: #FFFFFF; color: #15171C; font-weight: 600; box-shadow: 0 1px 3px rgba(20,23,28,0.12);' : 'background: transparent; color: #4A505C; font-weight: 500;')
+      };
+    });
+    const confirmed = [
+      { day: 'Ср 11', time: '10:00', name: 'Анна Ковалёва', service: 'Маникюр с покрытием', remind: 'Сегодня' },
+      { day: 'Чт 12', time: '11:00', name: 'Ольга Петрова', service: 'Снятие и маникюр', remind: 'Завтра' },
+      { day: 'Пт 13', time: '14:00', name: 'Дарья Ким', service: 'Маникюр с покрытием', remind: 'Пт' },
+      { day: 'Сб 14', time: '12:00', name: 'Ирина Белова', service: 'Педикюр', remind: 'Сб' }
+    ];
+    const past = [
+      { day: 'Пн 9', time: '10:00', name: 'Ольга Петрова', service: 'Маникюр с покрытием' },
+      { day: 'Пн 9', time: '16:00', name: 'Ксения Лебедева', service: 'Наращивание' },
+      { day: 'Вт 10', time: '12:00', name: 'Анна Ковалёва', service: 'Снятие покрытия' }
+    ];
+    return { accent, accentSoft: accent + '1F', tabs, confirmed, past,
+      showPending: this.state.tab === 0, showConfirmed: this.state.tab === 1, showPast: this.state.tab === 2 };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Календарь</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2A6BE0}a:hover{color:#1F55B8}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #F2F3F7; font-family: Inter, system-ui, sans-serif; color: #15171C">
+<main style="position: absolute; top: 0; left: 0; right: 0; bottom: 84px; overflow-y: auto; box-sizing: border-box; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 16px">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 13px; color: #5F6573">Ноябрь 2026</p>
+<h1 style="margin: 0; font-family: Manrope, Inter, sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.02em">Расписание</h1>
+</div>
+<div style="display: flex; gap: 8px">
+<button aria-label="Предыдущая неделя" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E1E4EB; background: #FFFFFF; color: #15171C; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<button aria-label="Следующая неделя" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E1E4EB; background: #FFFFFF; color: #15171C; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+</header>
+
+<section aria-label="Неделя" style="background: #FFFFFF; border-radius: 20px; padding: 10px 8px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+<button onClick="{{d.pick}}" aria-pressed="{{d.pressed}}" style="{{d.style}}">
+<span style="font-size: 11px; font-weight: 500; opacity: 0.8">{{d.wd}}</span>
+<span style="font-size: 17px; font-weight: 700">{{d.num}}</span>
+<span style="display: flex; gap: 3px; height: 5px">
+<sc-for list="{{d.dots}}" as="dot" hint-placeholder-count="2"><span style="{{dot}}"></span></sc-for>
+</span>
+</button>
+</sc-for>
+</section>
+
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">Среда, 11 ноября</h2>
+<span style="font-size: 13px; color: #5F6573">5 окон · 1 ждёт</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 14px">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">10:00</span><span style="font-size: 12px; color: #5F6573">11:30</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px; border-left: 3px solid #2A6BE0; padding-left: 12px">
+<span style="align-self: flex-start; font-size: 11px; font-weight: 600; color: #1F4FB5; background: #E3ECFC; border-radius: 999px; padding: 3px 8px">Занято</span>
+<span style="font-size: 15px; font-weight: 600">Анна Ковалёва</span>
+<span style="font-size: 13px; color: #5F6573">Маникюр с покрытием</span>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 0 0 1.5px #F2B66B inset">
+<div style="display: flex; gap: 14px">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">12:00</span><span style="font-size: 12px; color: #5F6573">13:30</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px; padding-left: 15px">
+<span style="align-self: flex-start; font-size: 11px; font-weight: 600; color: #8A4300; background: #FFF0DB; border-radius: 999px; padding: 3px 8px">Ждёт подтверждения</span>
+<span style="font-size: 15px; font-weight: 600">Мария Соколова</span>
+<span style="font-size: 13px; color: #5F6573">Наращивание · @maria_s</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button style="height: 44px; border-radius: 12px; border: 1px solid #E1E4EB; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 600; cursor: pointer">Отклонить</button>
+<button style="height: 44px; border-radius: 12px; border: none; background: {{accent}}; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer">Подтвердить</button>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 14px; align-items: center">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">14:00</span><span style="font-size: 12px; color: #5F6573">15:30</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px; border-left: 3px dashed #C9CDD6; padding-left: 12px">
+<span style="font-size: 15px; font-weight: 600; color: #3A3F4A">Свободно</span>
+<span style="font-size: 13px; color: #5F6573">Открыто для записи</span>
+</div>
+<button aria-label="Действия с окном 14:00" style="width: 44px; height: 44px; border-radius: 12px; border: none; background: transparent; color: #5F6573; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button>
+</article>
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 14px; align-items: center">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">16:00</span><span style="font-size: 12px; color: #5F6573">17:30</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px; border-left: 3px dashed #C9CDD6; padding-left: 12px">
+<span style="font-size: 15px; font-weight: 600; color: #3A3F4A">Свободно</span>
+<span style="font-size: 13px; color: #5F6573">Открыто для записи</span>
+</div>
+<button aria-label="Действия с окном 16:00" style="width: 44px; height: 44px; border-radius: 12px; border: none; background: transparent; color: #5F6573; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button>
+</article>
+
+<article style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 14px; align-items: center">
+<div style="width: 52px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">18:00</span><span style="font-size: 12px; color: #5F6573">19:30</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px; border-left: 3px dashed #C9CDD6; padding-left: 12px">
+<span style="font-size: 15px; font-weight: 600; color: #3A3F4A">Свободно</span>
+<span style="font-size: 13px; color: #5F6573">Открыто для записи</span>
+</div>
+<button aria-label="Действия с окном 18:00" style="width: 44px; height: 44px; border-radius: 12px; border: none; background: transparent; color: #5F6573; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg></button>
+</article>
+
+<button style="height: 52px; border-radius: 16px; border: 1.5px dashed {{accent}}; background: transparent; color: {{accent}}; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Добавить окно</button>
+</div>
+</main>
+
+<nav aria-label="Основная навигация" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; box-sizing: border-box; padding: 6px 8px 22px; background: #FFFFFF; border-top: 1px solid #E4E6EC; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">
+<a href="Main.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: {{accent}}; font-size: 11px; font-weight: 600">
+<span style="width: 56px; height: 30px; border-radius: 999px; background: {{accentSoft}}; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></span>Календарь</a>
+<a href="Bookings.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center; position: relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 3h6v3H9zM9 11h6M9 15h4"></path></svg><span style="position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; border-radius: 999px; background: #D9480F; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span></span>Записи</a>
+<a href="Profile.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg></span>Профиль</a>
+<a href="Settings.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; color: #5F6573; font-size: 11px; font-weight: 500">
+<span style="width: 56px; height: 30px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg></span>Настройки</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2A6BE0","options":["#2A6BE0","#7C3AED","#0F766E","#C2410C"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sel: 2 }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#2A6BE0';
+    const wd = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+    const nums = [9,10,11,12,13,14,15];
+    const load = [['b','b','f'],['b','f'],['b','p','f'],['f','f'],['b','b'],['f'],[]];
+    const days = nums.map((n, i) => {
+      const on = this.state.sel === i;
+      const color = { b: on ? '#FFFFFF' : accent, p: on ? '#FFD59A' : '#E07A10', f: on ? 'rgba(255,255,255,0.55)' : '#C9CDD6' };
+      return {
+        wd: wd[i], num: n, pressed: on ? 'true' : 'false',
+        pick: () => this.setState({ sel: i }),
+        style: 'height: 64px; border: none; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; padding: 0; ' + (on ? 'background: ' + accent + '; color: #FFFFFF;' : 'background: transparent; color: ' + (i > 4 ? '#5F6573' : '#15171C') + ';'),
+        dots: load[i].map(k => 'width: 5px; height: 5px; border-radius: 999px; background: ' + color[k] + ';')
+      };
+    });
+    return { accent, accentSoft: accent + '1F', days };
+  }
+}
+</script>
+</body>
+</html>
