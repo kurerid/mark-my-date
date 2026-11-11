@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import type { Product } from '@/shared/api/schemas';
+import { MerchantForm } from './MerchantForm';
+import { ProductForm } from './ProductForm';
 import { useQuery } from '@tanstack/react-query';
 import { shareURL } from '@tma.js/sdk';
 import { MapPin, ChevronRight, Copy, Share } from 'lucide-react';
@@ -8,6 +12,9 @@ import { Button } from '@/shared/ui/Button';
 import { Empty, Loading, QueryError } from '@/shared/ui/QueryState';
 import { notify } from '@/shared/ui/Toast';
 export function Page() {
+  const [sheet, setSheet] = useState<
+    { kind: 'merchant' } | { kind: 'product'; product?: Product } | null
+  >(null);
   const merchant = useQuery(merchantQuery);
   const products = useQuery(productsQuery);
   if (merchant.error)
@@ -23,7 +30,11 @@ export function Page() {
     <>
       <header className="flex items-center justify-between">
         <h1>Профиль</h1>
-        <Button variant="secondary" disabled>
+        <Button
+          variant="secondary"
+          className="relative min-h-10 before:absolute before:-inset-y-0.5 before:inset-x-0"
+          onClick={() => setSheet({ kind: 'merchant' })}
+        >
           Изменить
         </Button>
       </header>
@@ -81,7 +92,7 @@ export function Page() {
           <h2>Услуги</h2>
           <button
             type="button"
-            disabled
+            onClick={() => setSheet({ kind: 'product' })}
             className="min-h-11 text-[14px] font-semibold text-accent"
           >
             + Добавить
@@ -100,7 +111,7 @@ export function Page() {
               <button
                 type="button"
                 key={product.id}
-                disabled
+                onClick={() => setSheet({ kind: 'product', product })}
                 className="flex min-h-11 w-full items-center gap-2.5 border-divider px-4 py-3 text-left not-first:border-t"
               >
                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -123,11 +134,28 @@ export function Page() {
       <section className="flex flex-col gap-2">
         <h2 className="px-1">О студии</h2>
         <div
+          role={!data.description ? 'button' : undefined}
+          tabIndex={!data.description ? 0 : undefined}
+          onClick={() => {
+            if (!data.description) setSheet({ kind: 'merchant' });
+          }}
+          onKeyDown={(e) => {
+            if (!data.description && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault();
+              setSheet({ kind: 'merchant' });
+            }
+          }}
           className={`whitespace-pre-wrap rounded-card bg-surface px-4 py-3.5 text-[14px] leading-[1.5] ${data.description ? 'text-text-subtle' : 'text-text-muted'}`}
         >
           {data.description || 'Расскажите клиентам о себе'}
         </div>
       </section>
+      {sheet?.kind === 'merchant' && (
+        <MerchantForm merchant={data} onClose={() => setSheet(null)} />
+      )}
+      {sheet?.kind === 'product' && (
+        <ProductForm product={sheet.product} onClose={() => setSheet(null)} />
+      )}
     </>
   );
 }
