@@ -16,6 +16,7 @@ export function installTelegramMock() {
         user: JSON.stringify({ id: 1, first_name: 'Светлана' }),
         auth_date: String(Math.floor(Date.now() / 1000)),
         hash: 'development-only',
+        signature: '',
       }).toString(),
     },
     onEvent(event, next) {
