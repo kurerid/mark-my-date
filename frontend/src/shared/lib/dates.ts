@@ -26,7 +26,14 @@ export function weekDates(date: string) {
   );
 }
 export function formatDay(date: string, pattern: string) {
-  return format(dateAt(date, '12:00', 'UTC'), pattern, { locale: ru });
+  return format(
+    dateAt(date, '12:00', 'UTC'),
+    pattern
+      .split(/(E+)/)
+      .map((part) => (part === 'EEE' ? 'EEEEEE' : part))
+      .join(''),
+    { locale: ru },
+  ).replace(/\./g, '');
 }
 export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 export const isPastWindow = (
