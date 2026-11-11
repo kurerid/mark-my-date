@@ -1,9 +1,17 @@
+import { popup } from '@tma.js/sdk';
+import { z } from 'zod';
+import { request } from '@/shared/api/client';
+import { invalidateSlots, mutationError } from '@/shared/api/mutationErrors';
+import type { Slot } from '@/shared/api/schemas';
+import { notify } from '@/shared/ui/Toast';
+import { SlotForm } from './SlotForm';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { settingsQuery, slotsQuery } from '@/shared/api/queries';
 import {
   capitalize,
+  parseTiming,
   formatDay,
   shiftDate,
   today,
@@ -27,6 +35,39 @@ export function Page() {
   return <Calendar timezone={settings.data.timezone} />;
 }
 function Calendar({ timezone }: { timezone: string }) {
+  const client = useQueryClient();
+  const [sheet, setSheet] = useState<{ slot?: Slot } | null>(null);
+  const removal = useMutation({
+    mutationFn: (id: string) =>
+      request(`/api/slots/${id}`, z.undefined(), { method: 'DELETE' }),
+    onSuccess: () => notify('Окно удалено'),
+    onError: (error) =>
+      mutationError(error, { refresh: () => invalidateSlots(client) }),
+    onSettled: () => invalidateSlots(client),
+  });
+  async function menu(slot: Slot) {
+    const time = parseTiming(slot.timing);
+    const action = await popup.show({
+      message: `Действия с окном ${time.start}`,
+      buttons: [
+        { id: 'edit', text: 'Изменить время' },
+        { id: 'delete', type: 'destructive', text: 'Удалить' },
+        { id: 'cancel', text: 'Отмена' },
+      ],
+    });
+    if (action === 'edit') setSheet({ slot });
+    if (action === 'delete') {
+      const yes = await popup.show({
+        title: 'Удалить окно?',
+        message: `${capitalize(formatDay(slot.date, 'EEE, d MMM'))} · ${time.start}–${time.end}`,
+        buttons: [
+          { id: 'delete', type: 'destructive', text: 'Удалить' },
+          { id: 'cancel', text: 'Отмена' },
+        ],
+      });
+      if (yes === 'delete') removal.mutate(slot.id);
+    }
+  }
   const [selected, setSelected] = useState(() => today(timezone));
   const dates = weekDates(selected);
   const query = useQuery(slotsQuery(dates[0], dates[6]));
@@ -86,11 +127,40 @@ function Calendar({ timezone }: { timezone: string }) {
       ) : (
         <div className="flex flex-col gap-2.5">
           {daySlots.length ? (
-            daySlots.map((slot) => <SlotCard key={slot.id} slot={slot} />)
+            daySlots.map((slot) => (
+              <SlotCard
+                key={slot.id}
+                slot={slot}
+                onMenu={() =>
+                  void menu(slot).catch((error) =>
+                    mutationError(error, {
+                      refresh: () => invalidateSlots(client),
+                    }),
+                  )
+                }
+                busy={removal.isPending}
+              />
+            ))
           ) : (
             <Empty>В этот день окон нет</Empty>
           )}
         </div>
+      )}
+      <Button
+        variant="dashed"
+        className="min-h-[52px] w-full rounded-[16px] border-[1.5px] text-[15px]"
+        onClick={() => setSheet({})}
+      >
+        <Plus size={20} />
+        Добавить окно
+      </Button>
+      {sheet && (
+        <SlotForm
+          slot={sheet.slot}
+          date={selected}
+          timezone={timezone}
+          onClose={() => setSheet(null)}
+        />
       )}
     </>
   );

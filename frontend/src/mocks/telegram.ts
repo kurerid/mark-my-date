@@ -1,4 +1,4 @@
-import { emitEvent, mockTelegramEnv } from '@tma.js/sdk';
+import { emitEvent, mockTelegramEnv, type PopupParams } from '@tma.js/sdk';
 
 export function installTelegramMock() {
   const theme = {
@@ -38,6 +38,27 @@ export function installTelegramMock() {
         case 'web_app_request_content_safe_area':
           emitEvent('content_safe_area_changed', zero);
           break;
+        case 'web_app_open_popup': {
+          const params = event.params as PopupParams;
+          const buttons = params.buttons ?? [];
+          const message = [params.title, params.message]
+            .filter(Boolean)
+            .join('\n');
+          let chosen: string | undefined;
+          if (buttons.length > 2) {
+            const answer = window.prompt(
+              [
+                message,
+                ...buttons.map((b) => ('text' in b ? b.text : b.type)),
+              ].join('\n'),
+            );
+            chosen = buttons.find(
+              (b) => b.id === answer || ('text' in b && b.text === answer),
+            )?.id;
+          } else chosen = window.confirm(message) ? buttons[0]?.id : undefined;
+          emitEvent('popup_closed', { button_id: chosen });
+          break;
+        }
         default:
           next();
       }
