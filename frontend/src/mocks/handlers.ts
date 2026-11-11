@@ -1,6 +1,7 @@
 import { http, HttpResponse, type HttpResponseResolver } from 'msw';
 import { z } from 'zod';
 import {
+  dateSchema,
   merchantInput,
   productInput,
   slotInput,
@@ -32,6 +33,10 @@ const filterSlots = (request: Request, merchant = false) => {
   const from = params.get('periodFrom'),
     to = params.get('periodTo'),
     status = params.get('status');
+  if (from) dateSchema.parse(from);
+  if (to) dateSchema.parse(to);
+  if (params.has('order')) z.enum(['asc', 'desc']).parse(params.get('order'));
+  if (status) z.enum(['free', 'need_confirmation', 'confirmed']).parse(status);
   return db.slots
     .filter(
       (s) =>

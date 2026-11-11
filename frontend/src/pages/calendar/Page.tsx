@@ -82,7 +82,7 @@ function Calendar({ timezone }: { timezone: string }) {
   return (
     <>
       <header className="flex items-center justify-between gap-3">
-        <div>
+        <div className="flex flex-col gap-0.5">
           <p className="text-[13px] text-text-muted">
             {capitalize(formatDay(selected, 'LLLL yyyy'))}
           </p>

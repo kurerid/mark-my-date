@@ -1,4 +1,5 @@
-import { useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 let message = '';
 let timer: ReturnType<typeof setTimeout> | undefined;
 const listeners = new Set<() => void>();
@@ -18,8 +19,23 @@ export function notify(text: string) {
   }, 2500);
 }
 export function Toast() {
+  const [host, setHost] = useState<Element>(() => document.body);
+  useEffect(() => {
+    const syncHost = () =>
+      setHost(document.querySelector('dialog[open]') ?? document.body);
+    const observer = new MutationObserver(syncHost);
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['open'],
+    });
+    syncHost();
+    return () => observer.disconnect();
+  }, []);
+
   const value = useSyncExternalStore(subscribe, () => message);
-  return (
+  return createPortal(
     <div
       role="status"
       aria-live="polite"
@@ -31,6 +47,7 @@ export function Toast() {
       style={{ bottom: 'calc(var(--tabbar-height) + 12px)' }}
     >
       {value}
-    </div>
+    </div>,
+    host,
   );
 }

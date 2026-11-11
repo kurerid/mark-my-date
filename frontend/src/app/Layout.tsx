@@ -1,5 +1,6 @@
+import { Loading } from '@/shared/ui/QueryState';
 import { useUnauthorized } from '@/shared/api/authorization';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { on } from '@tma.js/sdk';
 import { focusManager } from '@tanstack/react-query';
@@ -28,7 +29,9 @@ export function Layout() {
   return (
     <>
       <main className="screen">
-        <Outlet />
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
       </main>
       <TabBar />
       <Toast />

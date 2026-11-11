@@ -52,6 +52,7 @@
     color: var(--color-text);
     font-family: var(--font-sans);
     font-size: 15px;
+    line-height: normal;
   }
   h1 {
     font-family: var(--font-heading);
@@ -183,4 +184,17 @@
   .skeleton {
     animation: none;
   }
+}
+
+.week-day::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: max(100%, 44px);
+  height: 100%;
+}
+.screen {
+  overflow-wrap: anywhere;
 }

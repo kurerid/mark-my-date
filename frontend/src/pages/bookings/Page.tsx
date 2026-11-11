@@ -44,7 +44,7 @@ function Bookings({ settings }: { settings: Settings }) {
   const counters = useQuery(countersQuery);
   return (
     <>
-      <header>
+      <header className="flex flex-col gap-0.5">
         <p className="text-[13px] text-text-muted">Заявки клиентов</p>
         <h1>Записи</h1>
       </header>

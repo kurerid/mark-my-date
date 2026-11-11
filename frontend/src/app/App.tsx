@@ -1,11 +1,21 @@
+import { lazy } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
-import { Page as Calendar } from '@/pages/calendar/Page';
-import { Page as Bookings } from '@/pages/bookings/Page';
-import { Page as Profile } from '@/pages/profile/Page';
-import { Page as Settings } from '@/pages/settings/Page';
 import { Layout } from './Layout';
 import { queryClient } from './queryClient';
+
+const Calendar = lazy(() =>
+  import('@/pages/calendar/Page').then((module) => ({ default: module.Page })),
+);
+const Bookings = lazy(() =>
+  import('@/pages/bookings/Page').then((module) => ({ default: module.Page })),
+);
+const Profile = lazy(() =>
+  import('@/pages/profile/Page').then((module) => ({ default: module.Page })),
+);
+const Settings = lazy(() =>
+  import('@/pages/settings/Page').then((module) => ({ default: module.Page })),
+);
 
 export function App() {
   return (

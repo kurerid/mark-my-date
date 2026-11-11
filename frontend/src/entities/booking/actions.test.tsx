@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { SlotForm } from '@/pages/calendar/SlotForm';
 import {
   afterAll,
   afterEach,
@@ -8,7 +9,15 @@ import {
   it,
   vi,
 } from 'vitest';
-import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  renderHook,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { setupServer } from 'msw/node';
@@ -23,6 +32,7 @@ vi.mock('@tma.js/sdk', () => ({
   initData: { raw: () => 'development-only' },
   popup: { show: telegram.popup },
   hapticFeedback: { notificationOccurred: telegram.haptic },
+  backButton: { isMounted: () => false },
 }));
 import { useBookingActions } from './useBookingActions';
 const server = setupServer(...handlers);
@@ -136,5 +146,58 @@ it('отмена popup не меняет запись, отклонение от
       }),
     ]),
   });
+  client.clear();
+});
+
+it('не позволяет менять или повторно отправлять окно до окончания сохранения', async () => {
+  HTMLDialogElement.prototype.showModal = function () {
+    this.setAttribute('open', '');
+  };
+  HTMLDialogElement.prototype.close = function () {
+    this.removeAttribute('open');
+  };
+  let requests = 0;
+  server.use(
+    http.post('*/api/slots', async () => {
+      requests++;
+      await delay(150);
+      return HttpResponse.json({
+        id: 'new',
+        date: '2099-01-01',
+        timing: '14:00-15:00',
+        status: 'free',
+        customer: null,
+        product: null,
+      });
+    }),
+  );
+  const client = new QueryClient({
+    defaultOptions: { mutations: { retry: false } },
+  });
+  const close = vi.fn();
+  render(
+    <QueryClientProvider client={client}>
+      <SlotForm
+        date="2099-01-01"
+        timezone="Asia/Yekaterinburg"
+        onClose={close}
+      />
+    </QueryClientProvider>,
+  );
+  const start = screen.getByLabelText('Начало'),
+    end = screen.getByLabelText('Конец');
+  fireEvent.change(start, { target: { value: '14:00' } });
+  fireEvent.change(end, { target: { value: '15:00' } });
+  const save = screen.getByRole('button', { name: 'Сохранить' });
+  fireEvent.click(save);
+  await waitFor(() => expect(requests).toBe(1));
+  expect((start as HTMLInputElement).disabled).toBe(true);
+  expect((end as HTMLInputElement).disabled).toBe(true);
+  expect((save as HTMLButtonElement).disabled).toBe(true);
+  fireEvent.change(start, { target: { value: '16:00' } });
+  fireEvent.submit(save.closest('form')!);
+  await waitFor(() => expect(close).toHaveBeenCalledOnce());
+  expect(requests).toBe(1);
+  expect((start as HTMLInputElement).value).toBe('14:00');
   client.clear();
 });

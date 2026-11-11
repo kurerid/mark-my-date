@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
+import { notify, Toast } from './Toast';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
@@ -129,4 +130,23 @@ it('ошибка загрузки позволяет повторить запр
   );
   expect(screen.getByText('Откройте приложение из Telegram')).toBeVisible();
   expect(screen.queryByText('secret-server-error')).not.toBeInTheDocument();
+});
+
+it('показывает ошибку поверх открытого dialog и возвращает toast в body после закрытия', async () => {
+  const dialog = document.createElement('dialog');
+  dialog.setAttribute('open', '');
+  document.body.append(dialog);
+  render(<Toast />);
+  act(() => notify('Что-то пошло не так. Попробуйте ещё раз'));
+  await waitFor(() =>
+    expect(dialog.querySelector('[role="status"]')).toHaveTextContent(
+      'Что-то пошло не так. Попробуйте ещё раз',
+    ),
+  );
+  act(() => dialog.remove());
+  await waitFor(() =>
+    expect(document.body.querySelector('[role="status"]')?.parentElement).toBe(
+      document.body,
+    ),
+  );
 });

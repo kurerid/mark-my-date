@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { request, ApiError } from '@/shared/api/client';
 import { slotInput, slotSchema, type Slot } from '@/shared/api/schemas';
@@ -23,6 +23,7 @@ export function SlotForm({
   onClose: () => void;
 }) {
   const client = useQueryClient();
+  const submitting = useRef(false);
   const initial = { date: slot?.date ?? date, timing: slot?.timing ?? '' };
   const times = slot ? parseTiming(slot.timing) : { start: '', end: '' };
   const [value, setValue] = useState({ date: initial.date, ...times });
@@ -43,10 +44,14 @@ export function SlotForm({
         refresh: () => invalidateSlots(client),
         form: true,
       }),
-    onSettled: () => invalidateSlots(client),
+    onSettled: () => {
+      submitting.current = false;
+      return invalidateSlots(client);
+    },
   });
   function submit(e: FormEvent) {
     e.preventDefault();
+    if (submitting.current || mutation.isPending) return;
     const input = { date: value.date, timing: `${value.start}-${value.end}` };
     const parsed = slotInput.safeParse(input);
     const next: Record<string, string> = {};
@@ -68,6 +73,7 @@ export function SlotForm({
       onClose();
       return;
     }
+    submitting.current = true;
     mutation.mutate(input);
   }
   const errorFor = (key: string) => errors[key];
@@ -87,11 +93,13 @@ export function SlotForm({
           <label className="field" key={key}>
             {label}
             <input
+              disabled={mutation.isPending}
               type={type}
               step={type === 'time' ? 900 : undefined}
               min={type === 'date' ? today(timezone) : undefined}
               value={value[key]}
               onChange={(e) => {
+                if (submitting.current || mutation.isPending) return;
                 setValue({ ...value, [key]: e.target.value });
                 setErrors({});
                 mutation.reset();

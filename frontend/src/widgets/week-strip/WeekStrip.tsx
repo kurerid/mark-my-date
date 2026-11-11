@@ -33,7 +33,7 @@ export function WeekStrip({
             aria-label={capitalize(formatDay(date, 'EEEE, d MMMM'))}
             aria-pressed={active}
             onClick={() => onSelect(date)}
-            className={`flex h-16 flex-col items-center justify-center gap-[3px] rounded-[14px] ${active ? 'bg-accent text-white' : `bg-transparent ${index > 4 ? 'text-text-muted' : 'text-text'}`}`}
+            className={`week-day relative flex h-16 flex-col items-center justify-center gap-[3px] rounded-[14px] ${active ? 'bg-accent text-white' : `bg-transparent ${index > 4 ? 'text-text-muted' : 'text-text'}`}`}
           >
             <span className="text-[11px] font-medium opacity-80">
               {capitalize(formatDay(date, 'EEEEEE'))}

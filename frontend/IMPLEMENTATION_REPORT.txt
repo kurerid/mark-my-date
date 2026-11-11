@@ -1,0 +1,225 @@
+Отчёт: Telegram Mini App — задачи 2–16
+
+Объём: локальный фронтенд продавца. По уточнению пользователя деплой и подключение Telegram-бота не выполняются.
+Текущая ветка task/16-verification содержит накопительный результат всех задач.
+
+Как запустить:
+  cd /home/stepan/projects/appointment-app/frontend
+  pnpm install --frozen-lockfile
+  pnpm dev
+  Открыть URL, напечатанный Vite. Четыре вкладки: /calendar, /bookings, /profile, /settings.
+  Тестовая страница токенов: /?tokens (только dev).
+
+Dev: mockTelegramEnv и MSW включаются только вне настоящего Telegram; данные фикстур хранятся в памяти и сбрасываются при обновлении страницы. Настоящие подписанные launch-данные в DEV не подменяются моками.
+
+Проверки:
+  pnpm lint — успешно (ESLint + Prettier).
+  pnpm typecheck — успешно.
+  pnpm test — 37 тестов: контракты MSW, даты/статусы/напоминания, компоненты, optimistic rollback, повторная отправка, Toast в dialog и реальный dev SDK.
+  pnpm build — успешно.
+  Все четыре команды выполнялись перед коммитами задач; финальные регрессии относятся к задаче 16.
+
+Задачи и изменённые файлы:
+
+2. task 2: add Tailwind design tokens and fonts (a443f88)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/index.html
+  frontend/package.json
+  frontend/pnpm-lock.yaml
+  frontend/src/app/App.tsx
+  frontend/src/app/TokenPreview.tsx
+  frontend/src/app/styles.css
+  frontend/src/main.tsx
+  frontend/vite.config.ts
+
+3. task 3: initialize Telegram SDK and development environment (b08296a)
+Готово: код и браузерный запуск — да. Реальный Telegram через туннель — не проверялся; подключение исключено последующим уточнением пользователя.
+Файлы:
+  frontend/package.json
+  frontend/pnpm-lock.yaml
+  frontend/src/main.tsx
+  frontend/src/mocks/telegram.ts
+  frontend/src/shared/lib/telegram.ts
+
+4. task 4: configure router and query providers (0024ff6)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/package.json
+  frontend/pnpm-lock.yaml
+  frontend/src/app/App.tsx
+  frontend/src/app/queryClient.ts
+  frontend/src/pages/bookings/Page.tsx
+  frontend/src/pages/calendar/Page.tsx
+  frontend/src/pages/profile/Page.tsx
+  frontend/src/pages/settings/Page.tsx
+
+4a. task 4a: add validated API contracts and MSW handlers (513cc31)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/.prettierignore
+  frontend/eslint.config.js
+  frontend/package.json
+  frontend/pnpm-lock.yaml
+  frontend/public/mockServiceWorker.js
+  frontend/src/main.tsx
+  frontend/src/mocks/browser.ts
+  frontend/src/mocks/fixtures.ts
+  frontend/src/mocks/handlers.ts
+  frontend/src/shared/api/client.ts
+  frontend/src/shared/api/contracts.test.ts
+  frontend/src/shared/api/mergeSettings.ts
+  frontend/src/shared/api/queries.ts
+  frontend/src/shared/api/schemas.ts
+  frontend/src/shared/lib/dates.ts
+
+5. task 5: implement shared accessible UI components (ecab089)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/package.json
+  frontend/pnpm-lock.yaml
+  frontend/src/app/styles.css
+  frontend/src/shared/ui/Avatar.tsx
+  frontend/src/shared/ui/Badge.tsx
+  frontend/src/shared/ui/BottomSheet.tsx
+  frontend/src/shared/ui/Button.tsx
+  frontend/src/shared/ui/Card.tsx
+  frontend/src/shared/ui/ListRow.tsx
+  frontend/src/shared/ui/SegmentedControl.tsx
+  frontend/src/shared/ui/Switch.tsx
+  frontend/src/shared/ui/Toast.tsx
+
+6. task 6: add tab navigation with pending counter and safe areas (52089dd)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/app/App.tsx
+  frontend/src/app/Layout.tsx
+  frontend/src/app/styles.css
+  frontend/src/widgets/tab-bar/TabBar.tsx
+
+7. task 7: implement weekly calendar and slot cards (357825d)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/app/styles.css
+  frontend/src/entities/slot/SlotCard.tsx
+  frontend/src/main.tsx
+  frontend/src/mocks/telegram.ts
+  frontend/src/pages/calendar/Page.tsx
+  frontend/src/shared/lib/formatters.ts
+  frontend/src/shared/ui/QueryState.tsx
+  frontend/src/widgets/week-strip/WeekStrip.tsx
+
+8. task 8: implement slot creation editing and deletion (59ec546)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/mocks/telegram.ts
+  frontend/src/pages/calendar/Page.tsx
+  frontend/src/pages/calendar/SlotForm.tsx
+  frontend/src/shared/api/mutationErrors.ts
+
+9. task 9: implement booking tabs and reminder rows (a526307)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/entities/booking/BookingRequestCard.tsx
+  frontend/src/entities/booking/BookingRow.tsx
+  frontend/src/pages/bookings/Page.tsx
+
+10. task 10: add optimistic booking confirmation and rejection (a22dc21)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/entities/booking/useBookingActions.ts
+  frontend/src/pages/bookings/Page.tsx
+  frontend/src/pages/calendar/Page.tsx
+
+11. task 11: implement business profile and public booking link (752e160)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/pages/profile/Page.tsx
+  frontend/src/shared/lib/formatters.ts
+
+12. task 12: add profile and service CRUD forms (fb61725)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/pages/profile/MerchantForm.tsx
+  frontend/src/pages/profile/Page.tsx
+  frontend/src/pages/profile/ProductForm.tsx
+  frontend/src/shared/lib/validation.ts
+  frontend/src/shared/ui/Field.tsx
+
+13. task 13: implement optimistic merchant settings and value editors (e8f4e4b)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/.env.example
+  frontend/src/pages/settings/Page.tsx
+  frontend/src/pages/settings/SettingEditor.tsx
+  frontend/src/pages/settings/useSettingsMutation.ts
+  frontend/src/pages/settings/values.ts
+  frontend/src/shared/api/mergeSettings.ts
+
+14. task 14: complete loading empty and error states (2d388ea)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/src/app/Layout.tsx
+  frontend/src/app/queryClient.ts
+  frontend/src/pages/calendar/Page.tsx
+  frontend/src/pages/profile/Page.tsx
+  frontend/src/shared/api/authorization.ts
+  frontend/src/shared/api/client.ts
+  frontend/src/shared/lib/telegram.ts
+
+15. task 15: test formatters cards navigation and optimistic actions (0420e65)
+Готово по локальной части задачи: да. Проверки качества зелёные.
+Файлы:
+  frontend/package.json
+  frontend/pnpm-lock.yaml
+  frontend/src/entities/booking/actions.test.tsx
+  frontend/src/shared/lib/dates.ts
+  frontend/src/shared/lib/formatters.test.ts
+  frontend/src/shared/ui/components.test.tsx
+
+16. Визуальная проверка и локальная доводка (task/16-verification)
+Готово по согласованному локальному объёму: да.
+  Проверены calendar/bookings/profile/settings на ширинах 360, 390 и 430 px: горизонтального переполнения нет.
+  Сверены шрифты, межстрочные интервалы, размеры строк/контролов, карточки, статусы, отступы, fixed tab-bar 84px при нулевой safe-area.
+  Браузер: создание окна, confirm/reject и счётчики, создание услуги, редактирование профиля, переключатели и выбор значений настроек.
+  Исправлены два дефекта по независимому ревью: повторный submit окна и Toast под модальным dialog. Добавлены регрессии.
+  Маршруты загружаются отдельными чанками; сборка без предупреждения о большом общем чанке.
+  Тексты и поведение раздела 7 имеют приоритет над устаревшими частями исходных макетов.
+Файлы:
+  frontend/IMPLEMENTATION_REPORT.txt
+  frontend/package.json
+  frontend/src/app/App.tsx
+  frontend/src/app/Layout.tsx
+  frontend/src/app/styles.css
+  frontend/src/entities/booking/actions.test.tsx
+  frontend/src/main.tsx
+  frontend/src/mocks/handlers.ts
+  frontend/src/mocks/telegram.test.ts
+  frontend/src/pages/bookings/Page.tsx
+  frontend/src/pages/calendar/Page.tsx
+  frontend/src/pages/calendar/SlotForm.tsx
+  frontend/src/shared/ui/ListRow.tsx
+  frontend/src/shared/ui/Toast.tsx
+  frontend/src/shared/ui/components.test.tsx
+  frontend/src/widgets/week-strip/WeekStrip.tsx
+
+TODO(spec) и вопросы: нет.
+
+Посмотреть человеку перед подключением реального API:
+  src/shared/api/client.ts и src/shared/lib/telegram.ts — реальные initData/авторизация, разделение DEV и production.
+  src/pages/calendar/Page.tsx и src/pages/profile/ProductForm.tsx — серверная изоляция продавцов, запрет удаления занятого окна и сохранение записей после удаления услуги.
+  eslint.config.js, package.json, src/shared/api/contracts.test.ts — инструменты проверки и граница покрытия MSW.
+
+Не удалось проверить в текущем окружении:
+  Настоящий бэкенд и проверку подписи initData сервером. Контрактные тесты проверяют моки, а не существующий Go API.
+  Telegram popup, BackButton, theme/viewport/safe-area на физических iOS и Android.
+  Пиксельный image-diff с исходными .dc.html: их специальный runtime support.js отсутствует; сверка проведена по HTML-стилям и браузерным скриншотам приложения.
+
+Не выполнялось:
+  Деплой, BotFather, подключение бота (по указанию пользователя).
+  Клиентские экраны, бот-уведомления, тёмная тема, i18n, платежи/тарифы и другие функции вне MVP.
+  Изменения backend и исходных документов/макетов.
+
+Артефакты проверки:
+  /home/stepan/.codex/visualizations/2026/11/11/01a1c9d3-b832-7432-94a2-3e6fc8dcd390/appointment-mvp/
+  Скриншоты calendar-390.png, bookings-390.png, profile-390.png, settings-390.png и замеры responsive.json.
