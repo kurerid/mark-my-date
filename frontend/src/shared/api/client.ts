@@ -1,3 +1,4 @@
+import { markUnauthorized } from './authorization';
 import { initData } from '@tma.js/sdk';
 import { z } from 'zod';
 import { apiErrorSchema } from './schemas';
@@ -17,7 +18,10 @@ export async function request<S extends z.ZodType>(
   options: { method?: string; body?: unknown; signal?: AbortSignal } = {},
 ): Promise<z.infer<S>> {
   const raw = initData.raw();
-  if (!raw) throw new ApiError(401, 'unauthorized', '');
+  if (!raw) {
+    markUnauthorized();
+    throw new ApiError(401, 'unauthorized', '');
+  }
   const response = await fetch(path, {
     method: options.method ?? 'GET',
     signal: options.signal,
@@ -32,6 +36,7 @@ export async function request<S extends z.ZodType>(
       : {}),
   });
   if (!response.ok) {
+    if (response.status === 401) markUnauthorized();
     const parsed = apiErrorSchema.safeParse(
       await response.json().catch(() => null),
     );

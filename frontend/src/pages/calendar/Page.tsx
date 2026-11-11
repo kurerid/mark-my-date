@@ -32,7 +32,7 @@ export function Page() {
         retry={() => void settings.refetch()}
       />
     );
-  if (!settings.data) return <Loading />;
+  if (!settings.data) return <Loading heights={[60, 84, 24, 100, 156, 74]} />;
   return <Calendar timezone={settings.data.timezone} />;
 }
 function Calendar({ timezone }: { timezone: string }) {
@@ -125,7 +125,7 @@ function Calendar({ timezone }: { timezone: string }) {
       {query.error ? (
         <QueryError error={query.error} retry={() => void query.refetch()} />
       ) : query.isPending ? (
-        <Loading />
+        <Loading heights={[100, 156, 74]} />
       ) : (
         <div className="flex flex-col gap-2.5">
           {daySlots.length ? (

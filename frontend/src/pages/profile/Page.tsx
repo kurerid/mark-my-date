@@ -104,7 +104,7 @@ export function Page() {
             retry={() => void products.refetch()}
           />
         ) : !products.data ? (
-          <Loading heights={[64, 64, 64]} />
+          <Loading heights={[68, 68, 68]} />
         ) : products.data.products.length ? (
           <div className="overflow-hidden rounded-card bg-surface">
             {products.data.products.map((product) => (

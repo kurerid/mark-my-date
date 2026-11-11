@@ -1,3 +1,4 @@
+import { useUnauthorized } from '@/shared/api/authorization';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { on } from '@tma.js/sdk';
@@ -6,6 +7,7 @@ import { TabBar } from '@/widgets/tab-bar/TabBar';
 import { Toast } from '@/shared/ui/Toast';
 import { queryClient } from './queryClient';
 export function Layout() {
+  const unauthorized = useUnauthorized();
   useEffect(
     () =>
       on('visibility_changed', ({ is_visible }) => {
@@ -15,6 +17,14 @@ export function Layout() {
       }),
     [],
   );
+  if (unauthorized)
+    return (
+      <main className="screen justify-center text-center">
+        <p role="alert" className="text-[13px] text-text-muted">
+          Откройте приложение из Telegram
+        </p>
+      </main>
+    );
   return (
     <>
       <main className="screen">

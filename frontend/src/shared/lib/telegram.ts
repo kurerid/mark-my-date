@@ -3,6 +3,7 @@ import {
   init,
   initData,
   isTMA,
+  retrieveRawInitData,
   miniApp,
   themeParams,
   viewport,
@@ -10,14 +11,19 @@ import {
 
 export let isDevelopmentMock = false;
 export async function initializeTelegram() {
+  let raw: string | undefined;
+  try {
+    raw = retrieveRawInitData();
+  } catch {
+    raw = undefined;
+  }
   if (
     import.meta.env.DEV &&
-    (!isTMA() || sessionStorage.getItem('appointment-dev-mock') === 'true')
+    (!raw || new URLSearchParams(raw).get('hash') === 'development-only')
   ) {
     const { installTelegramMock } = await import('@/mocks/telegram');
     installTelegramMock();
     isDevelopmentMock = true;
-    sessionStorage.setItem('appointment-dev-mock', 'true');
   }
   if (!isTMA()) return false;
   init();
