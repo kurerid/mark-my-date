@@ -1,3 +1,4 @@
+import { TokenPreview } from './TokenPreview';
 export function App() {
-  return null;
+  return <TokenPreview />;
 }
