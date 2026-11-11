@@ -1,4 +1,9 @@
-import { settingsSchema, type Settings, type SettingsPatch } from './schemas';
+import {
+  settingsPatch,
+  settingsSchema,
+  type Settings,
+  type SettingsPatch,
+} from './schemas';
 export function mergeSettings(
   current: Settings,
   patch: SettingsPatch,
@@ -35,4 +40,33 @@ export function mergeSettings(
       ...patch.personalNotification,
     },
   });
+}
+
+export function changedSettings(
+  current: Settings,
+  patch: SettingsPatch,
+): SettingsPatch {
+  const diff = (before: unknown, next: unknown): unknown => {
+    if (JSON.stringify(before) === JSON.stringify(next)) return undefined;
+    if (next && typeof next === 'object' && !Array.isArray(next))
+      return Object.fromEntries(
+        Object.entries(next).flatMap(([key, value]) => {
+          const changed = diff(
+            before && typeof before === 'object'
+              ? (before as Record<string, unknown>)[key]
+              : undefined,
+            value,
+          );
+          return changed === undefined ||
+            (typeof changed === 'object' &&
+              changed !== null &&
+              !Array.isArray(changed) &&
+              Object.keys(changed).length === 0)
+            ? []
+            : [[key, changed]];
+        }),
+      );
+    return next;
+  };
+  return settingsPatch.parse(diff(current, patch) ?? {});
 }
