@@ -1,3 +1,4 @@
+import { useBookingActions } from '@/entities/booking/useBookingActions';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router';
 import type { Settings } from '@/shared/api/schemas';
@@ -24,6 +25,7 @@ export function Page() {
   return <Bookings settings={settings.data} />;
 }
 function Bookings({ settings }: { settings: Settings }) {
+  const actions = useBookingActions();
   const [params, setParams] = useSearchParams();
   const candidate = params.get('tab');
   const tab =
@@ -78,6 +80,9 @@ function Bookings({ settings }: { settings: Settings }) {
                 key={slot.id}
                 slot={slot}
                 tone={index % 2 ? 'blue' : 'warm'}
+                onConfirm={() => actions.confirm(slot)}
+                onReject={() => void actions.reject(slot)}
+                busy={actions.busy}
               />
             ) : slot.status === 'confirmed' ? (
               <BookingRow

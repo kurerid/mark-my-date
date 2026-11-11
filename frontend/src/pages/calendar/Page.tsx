@@ -1,3 +1,4 @@
+import { useBookingActions } from '@/entities/booking/useBookingActions';
 import { popup } from '@tma.js/sdk';
 import { z } from 'zod';
 import { request } from '@/shared/api/client';
@@ -35,6 +36,7 @@ export function Page() {
   return <Calendar timezone={settings.data.timezone} />;
 }
 function Calendar({ timezone }: { timezone: string }) {
+  const actions = useBookingActions();
   const client = useQueryClient();
   const [sheet, setSheet] = useState<{ slot?: Slot } | null>(null);
   const removal = useMutation({
@@ -138,7 +140,9 @@ function Calendar({ timezone }: { timezone: string }) {
                     }),
                   )
                 }
-                busy={removal.isPending}
+                busy={removal.isPending || actions.busy}
+                onConfirm={() => actions.confirm(slot)}
+                onReject={() => void actions.reject(slot)}
               />
             ))
           ) : (
