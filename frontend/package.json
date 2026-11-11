@@ -12,12 +12,15 @@
     "format": "prettier . --write"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.5.0",
     "@tanstack/react-query": "^5.107.1",
     "@tma.js/sdk": "^3.3.0",
     "@tma.js/sdk-react": "^3.0.23",
+    "date-fns": "^4.4.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-router": "^8.5.1"
+    "react-router": "^8.5.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -28,11 +31,17 @@
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.3.0",
     "eslint": "^10.14.0",
+    "msw": "^3.0.4",
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.5",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.7",
     "vitest": "^5.1.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
